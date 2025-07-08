@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
+from src.utils.read_json import read_json
 
 def main(): 
     load_dotenv()
@@ -25,5 +26,13 @@ def main():
     async def on_ready():
         print("接続に成功しました")
 
+def read_json_test():
+    data = read_json(".dataset/.peroid.json")
+    if data:
+        print(data)
+    else:
+        print("JSONファイルの読み込みに失敗しました")
+
 if __name__ == "__main__":
+    read_json_test()
     main()
