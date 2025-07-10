@@ -4,13 +4,13 @@ from dotenv import load_dotenv
 import os
 from src.utils.read_json import read_json
 from src.database import DB_Connect
-from src.bot import MyClient
+from src.bot import MakeClient
 
 def main(): 
     load_dotenv()
     
-    bot = MyClient(intents=discord.Intents.default())
-    bot.run_bot()
+    client = MakeClient()
+    client.run_bot()
 
 if __name__ == "__main__":
     main()
