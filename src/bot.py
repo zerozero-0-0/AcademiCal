@@ -34,6 +34,8 @@ class MyClient(commands.Bot):
     
     async def on_ready(self):
         print(f'{self.user} としてDiscordに接続しました!') 
+        
+        await self.tree.sync()
         channel = self.get_channel(int(CHANNEL_ID))
         if channel:
             await channel.send("Botが起動しました!")
@@ -50,9 +52,7 @@ class MyClient(commands.Bot):
         self.run(self.discord_token)
 
 def MakeClient():
-    intents = discord.Intents.default()
-    intents.message_content = True
-    client = MyClient(intents=intents)
+    client = MyClient()
     
     @client.tree.command(name="modal")
     async def modal_command(interaction: discord.Interaction):

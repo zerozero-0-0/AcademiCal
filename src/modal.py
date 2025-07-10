@@ -6,8 +6,6 @@ import os
 # 2. 入力を受け取る
 # 3. 入力内容をdbに適用
 
-bot = commands.Bot(command_prefix='!', intents=discord.Intents.default())
-
 class Modal(discord.ui.Modal):
     def __init__(self) -> None:
         super().__init__(title="AcademiCal Modal", timeout=None, custom_id="academical_modal")

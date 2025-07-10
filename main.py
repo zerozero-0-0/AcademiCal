@@ -7,8 +7,6 @@ from src.database import DB_Connect
 from src.bot import MakeClient
 
 def main(): 
-    load_dotenv()
-    
     client = MakeClient()
     client.run_bot()
 
