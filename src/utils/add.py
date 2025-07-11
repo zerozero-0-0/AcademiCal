@@ -16,7 +16,7 @@ class Add(discord.ui.Modal):
     task_title = discord.ui.TextInput(
         label="課題名を入力",
         style=discord.TextStyle.short,
-        placeholder="課題名",
+        placeholder="課題名", # 将来的に[授業名][第n回レポート]にする
         required=True
     )
     
@@ -29,7 +29,7 @@ class Add(discord.ui.Modal):
     task_due_date = discord.ui.TextInput(
         label="締切日を入力",
         style=discord.TextStyle.short,
-        placeholder=time,
+        default=time,
         required=True
     )
 
