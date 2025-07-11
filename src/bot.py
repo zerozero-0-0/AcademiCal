@@ -54,7 +54,7 @@ class MyClient(commands.Bot):
 def MakeClient():
     client = MyClient()
     
-    @client.tree.command(name="modal", description="課題追加用のモーダル")
+    @client.tree.command(name="add", description="課題追加用のモーダル")
     async def modal_command(interaction: discord.Interaction):
         await interaction.response.send_modal(Add())
     
