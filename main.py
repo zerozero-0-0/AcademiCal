@@ -5,8 +5,10 @@ import os
 from src.utils.read_json import read_json
 from src.database import DB_Connect
 from src.bot import MakeClient
+from server import run_health_server
 
 def main(): 
+    run_health_server()
     DB_Connect()
     
     client = MakeClient()

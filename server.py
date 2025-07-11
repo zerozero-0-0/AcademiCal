@@ -4,13 +4,13 @@ import uvicorn
 
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    return {"message": "Server is running"}
+@app.get("/health")
+async def health():
+    return "OK"
 
 def start():
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    uvicorn.run(app, host="0.0.0.0", port=8080, log_level="warning")
     
-def server_thread():
-    t = Thread(target=start)
+def run_health_server():
+    t = Thread(target=start,daemon=True)
     t.start()
