@@ -4,7 +4,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import os
 from src.utils.button import button_command
-from src.modal import Modal
+from src.utils.modal import Modal
 
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
