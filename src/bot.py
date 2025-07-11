@@ -62,6 +62,6 @@ def MakeClient():
     @client.tree.command(name="list")
     async def list_command(interaction: discord.Interaction):
         embed = List()
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed)
     
     return client
