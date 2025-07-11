@@ -11,7 +11,7 @@ ENV TZ Asia/Tokyo
 ENV TERM xterm
 
 # pip install
-COPY requirements.txt /bot/
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
 
