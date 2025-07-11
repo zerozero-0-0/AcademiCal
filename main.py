@@ -1,8 +1,3 @@
-import discord
-from discord.ext import commands
-from dotenv import load_dotenv
-import os
-from src.utils.read_json import read_json
 from src.database import DB_Connect
 from src.bot import MakeClient
 from server import run_health_server

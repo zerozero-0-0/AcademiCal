@@ -17,7 +17,7 @@ COPY . .
 
 # Dynamic port configuration
 ARG PORT
-EXPOSE ${PORT:-8080}
+EXPOSE ${PORT:-8000}
 
 # 実行
 CMD ["python", "main.py"]
