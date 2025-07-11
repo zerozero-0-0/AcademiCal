@@ -1,8 +1,9 @@
 import sqlite3
 
+DB_name = 'assignments.db'
+
 def DB_Connect():
     
-    DB_name = 'assignment.db'
     conn = sqlite3.connect(DB_name, isolation_level=None)
     
     cursor = conn.cursor()
@@ -16,11 +17,12 @@ def DB_Connect():
             status TEXT CHECK(status IN ('pending','completed')) DEFAULT 'pending')            
     ''')
     
+    conn.commit()
     cursor.close()
     conn.close()
     
 def DB_Insert(title, description, due_data):
-    conn = sqlite3.connect('assignment.db')
+    conn = sqlite3.connect(DB_name)
     
     cur = conn.cursor()
     
@@ -31,7 +33,7 @@ def DB_Insert(title, description, due_data):
     conn.close()
 
 def DB_Update(id, title, description, due_date, status):
-    conn = sqlite3.connect('assignment.db')    
+    conn = sqlite3.connect(DB_name)    
     cur = conn.cursor()
     
     cur.execute('UPDATE assignments SET title = ?, description = ?, due_date = ?, status = ? WHERE id = ?', (title, description, due_date, status, id))    
@@ -41,7 +43,7 @@ def DB_Update(id, title, description, due_date, status):
     conn.close()
     
 def DB_Delete(id):
-    conn = sqlite3.connect('assignment.db')
+    conn = sqlite3.connect(DB_name)
     
     cur = conn.cursor()
     
@@ -50,3 +52,17 @@ def DB_Delete(id):
     conn.commit()
     cur.close()
     conn.close()
+
+def DB_Check_All() -> list:
+    conn = sqlite3.connect(DB_name)
+    
+    cur = conn.cursor()
+    
+    cur.execute('SELECT * FROM assignments')
+    
+    row = cur.fetchall()
+    
+    cur.close()
+    conn.close()
+    
+    return row

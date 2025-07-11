@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 from src.utils.button import button_command
 from src.utils.modal import Modal
+from src.utils.list import List
 
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
@@ -57,5 +58,10 @@ def MakeClient():
     @client.tree.command(name="modal")
     async def modal_command(interaction: discord.Interaction):
         await interaction.response.send_modal(Modal())
+        
+    @client.tree.command(name="list")
+    async def list_command(interaction: discord.Interaction):
+        embed = List()
+        await interaction.response.send_message(embed=embed)
     
     return client
