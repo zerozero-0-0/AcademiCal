@@ -5,8 +5,7 @@ from dotenv import load_dotenv
 import os
 from src.utils.button import button_command
 from src.utils.modal import Modal
-from src.utils.list import List
-
+from src.utils.task_list import create_task_list
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = os.getenv("CHANNEL_ID")
@@ -55,13 +54,14 @@ class MyClient(commands.Bot):
 def MakeClient():
     client = MyClient()
     
-    @client.tree.command(name="modal")
+    @client.tree.command(name="modal", description="課題追加用のモーダル")
     async def modal_command(interaction: discord.Interaction):
         await interaction.response.send_modal(Modal())
-        
-    @client.tree.command(name="list")
+    
+    #
+    @client.tree.command(name="list", description="登録されている課題の一覧を表示")
     async def list_command(interaction: discord.Interaction):
-        embed = List()
-        await interaction.response.send_message(embed)
+        embed = create_task_list()
+        await interaction.response.send_message(embed=embed)
     
     return client

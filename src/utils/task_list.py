@@ -1,7 +1,7 @@
 import discord
 from src.database import DB_Check_All
 
-def List() -> discord.Embed:
+def create_task_list() -> discord.Embed:
     tasks = DB_Check_All()
     
     embed = discord.Embed(
