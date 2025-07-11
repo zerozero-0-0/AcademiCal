@@ -15,8 +15,9 @@ COPY requirements.txt /bot/
 RUN pip install -r requirements.txt
 COPY . .
 
-# ポート開放 (uvicornで指定したポート)
-EXPOSE 8080
+# Dynamic port configuration
+ARG PORT
+EXPOSE ${PORT:-8080}
 
 # 実行
 CMD ["python", "main.py"]
