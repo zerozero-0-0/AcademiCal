@@ -1,14 +1,14 @@
 import discord
 from discord.ext import commands
 import os
-import datetime
+from datetime import datetime, timedelta
 from src.database import DB_Insert
 
 # 1. GUIを表示
 # 2. 入力を受け取る
 # 3. 入力内容をdbに適用
 
-current_time = datetime.datetime.now()
+current_time = datetime.now() + timedelta(days=7)
 
 time = current_time.strftime("%m/%d %H:%M")
 
