@@ -53,6 +53,25 @@ def DB_Delete(id):
     cur.close()
     conn.close()
 
+def DB_Done(id: str) -> None:
+    """
+    課題をpendingからcompletedに変更する
+    Args:
+        id (str): 課題のID
+    Returns:
+        None
+    """
+    conn = sqlite3.connect(DB_name)
+    
+    cur = conn.cursor()
+    
+    cur.execute('UPDATE assignments SET status = "completed" WHERE id = ?', (id,))
+    
+    conn.commit()
+    cur.close()
+    conn.close()
+    
+
 def DB_Check_All() -> list:
     conn = sqlite3.connect(DB_name)
     

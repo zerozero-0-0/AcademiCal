@@ -4,7 +4,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import os
 from src.utils.button import button_command
-from src.utils.modal import Modal
+from src.utils.add import Add
 from src.utils.task_list import create_task_list
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
@@ -49,14 +49,14 @@ class MyClient(commands.Bot):
         print(f'{message.author} からメッセージを受信しました: {message.content}')
         
     def run_bot(self):
-        self.run(self.discord_token)
+        self.run(self.discord_token) # type: ignore
 
 def MakeClient():
     client = MyClient()
     
     @client.tree.command(name="modal", description="課題追加用のモーダル")
     async def modal_command(interaction: discord.Interaction):
-        await interaction.response.send_modal(Modal())
+        await interaction.response.send_modal(Add())
     
     #
     @client.tree.command(name="list", description="登録されている課題の一覧を表示")

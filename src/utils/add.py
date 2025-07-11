@@ -12,7 +12,7 @@ current_time = datetime.now() + timedelta(days=7)
 
 time = current_time.strftime("%m/%d %H:%M")
 
-class Modal(discord.ui.Modal):
+class Add(discord.ui.Modal):
     task_title = discord.ui.TextInput(
         label="課題名を入力",
         style=discord.TextStyle.short,
