@@ -85,3 +85,22 @@ def DB_Check_All() -> list:
     conn.close()
     
     return row
+
+def DB_Check_Pending() -> list:
+    """
+    課題のうち、未完了のものを取得する
+    Returns:
+        list: 未完了の課題のリスト
+    """
+    conn = sqlite3.connect(DB_name)
+    
+    cur = conn.cursor()
+    
+    cur.execute('SELECT * FROM assignments WHERE status = "pending"')
+    
+    row = cur.fetchall()
+    
+    cur.close()
+    conn.close()
+    
+    return row

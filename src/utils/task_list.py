@@ -1,8 +1,8 @@
 import discord
-from src.database import DB_Check_All
+from src.database import DB_Check_Pending
 
 def create_task_list() -> discord.Embed:
-    tasks = DB_Check_All()
+    tasks = DB_Check_Pending()
     
     embed = discord.Embed(
         title="課題一覧",

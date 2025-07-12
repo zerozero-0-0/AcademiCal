@@ -5,10 +5,11 @@ import os
 from src.utils.read_json import read_json
 from src.database import DB_Connect
 from src.bot import MakeClient
-from server import run_health_server
+from server import start_health_server
+import threading
 
 def main(): 
-    run_health_server()
+    threading.Thread(target=start_health_server, daemon=True).start()
     DB_Connect()
     
     client = MakeClient()
