@@ -1,4 +1,5 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from os import name
 import threading
 
 
@@ -15,5 +16,6 @@ def start_health_server():
     server.serve_forever()
 
 
-# Discordボット起動前に実行
-threading.Thread(target=start_health_server, daemon=True).start()
+if __name__ == "__main__":
+    # Discordボット起動前に実行
+    threading.Thread(target=start_health_server, daemon=True).start()
