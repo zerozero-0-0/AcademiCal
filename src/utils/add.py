@@ -3,6 +3,7 @@ from discord.ext import commands
 import os
 from datetime import datetime, timedelta
 from src.database import DB_Insert
+import re
 
 # 1. GUIを表示
 # 2. 入力を受け取る
@@ -37,6 +38,13 @@ class Add(discord.ui.Modal):
         super().__init__(title="AcademiCal Modal")
         
     async def on_submit(self, interaction: discord.Interaction) -> None:
+        if not re.match(r"^\d{1,2}/\d{1,2} \d{1,2}:\d{2}$", self.task_due_date.value):
+            await interaction.response.send_message(
+                "締切日は「MM/DD HH:MM」の形式で入力してください。",
+                ephemeral=True
+            )
+            return
+        
         DB_Insert(
             title=self.task_title.value,
             description=self.task_description.value,
