@@ -1,6 +1,4 @@
 import discord
-from discord.ext import commands
-import os
 from datetime import datetime, timedelta
 from src.database import DB_Insert
 import re

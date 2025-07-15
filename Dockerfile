@@ -1,5 +1,5 @@
 FROM python:3.11
-WORKDIR .
+WORKDIR /app
 
 # 更新・日本語化
 RUN apt-get update && apt-get -y install locales && apt-get -y upgrade && \
@@ -14,10 +14,6 @@ ENV TERM xterm
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
-
-# Dynamic port configuration
-ARG PORT
-EXPOSE ${PORT:-8080}
 
 # 実行
 CMD ["python", "main.py"]

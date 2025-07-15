@@ -1,6 +1,5 @@
-from typing import Any
 import discord
-from src.database import DB_Done, DB_Check_All
+from src.database import DB_Done
 
 """
 doneメソッドの関数
