@@ -38,15 +38,15 @@ def health_check():
 
 
 def start_health_check_cron():
-    """1時間ごとにヘルスチェックの定期実行を開始"""
-    print("🕐 ヘルスチェックの定期実行を開始しました (1時間間隔)")
+    """5分ごとにヘルスチェックの定期実行を開始（Koyebの最大間隔300秒に対応）"""
+    print("🕐 ヘルスチェックの定期実行を開始しました (5分間隔)")
 
     def run_cron():
         """クロンジョブを実行する関数"""
         while True:
             health_check()
-            # 1時間（3600秒）待機
-            time.sleep(3600)
+            # 5分（300秒）待機 - Koyebのヘルスチェック間隔に合わせる
+            time.sleep(300)
 
     # バックグラウンドスレッドでクロンジョブを実行
     cron_thread = threading.Thread(target=run_cron, daemon=True)
@@ -77,7 +77,7 @@ def start_health_check_cron_10min():
 if __name__ == "__main__":
     print("ヘルスチェッククロンジョブをテスト実行中...")
 
-    # 1時間ごとのテスト（テスト用に短縮）
+    # 5分間隔のテスト（テスト用に短縮）
     print("テストモード: 30秒間隔でヘルスチェックを実行します")
 
     def test_cron():
@@ -90,6 +90,7 @@ if __name__ == "__main__":
 
     try:
         print("クロンジョブが実行中です。Ctrl+Cで停止できます。")
+        print("本番環境では5分間隔で実行されます。")
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
