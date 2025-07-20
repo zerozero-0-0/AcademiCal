@@ -1,4 +1,5 @@
 
+import asyncio
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -7,6 +8,7 @@ from src.utils.add import Add
 from src.utils.task_list import create_task_list
 from src.database import DB_Check_All
 from src.utils.done import DoneView
+from src.utils.class_end_notification import start_class_end_notification_scheduler
 
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
@@ -43,6 +45,8 @@ class MyClient(commands.Bot):
             await channel.send("Botが起動しました!")
         else:
             print(f"チャンネルID {self.channel_id} が見つかりません。設定を確認してください。")
+        
+        asyncio.create_task(start_class_end_notification_scheduler(self))
         
     async def on_message(self, message: discord.Message):
         if message.author == self.user:
@@ -87,5 +91,5 @@ def MakeClient() -> MyClient:
             view=view,
             ephemeral=True
         )
-
+        
     return client

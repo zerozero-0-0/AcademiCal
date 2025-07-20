@@ -1,3 +1,4 @@
+import re
 from src.utils.read_json import read_json
 from src.utils.scheduler import get_subject_by_period
 from datetime import datetime, timedelta
@@ -26,7 +27,6 @@ class Notification(discord.ui.Modal):
     task_title = discord.ui.TextInput(
         label="課題名を入力",
         style=discord.TextStyle.short,
-        default = 
         required=True
     )
     
