@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 from src.utils.add import Add
 from src.utils.task_list import create_task_list
-from src.database import DB_Check_All
+from src.database import DB_Check_Pending
 from src.utils.done import DoneView
 from src.utils.class_end_notification import start_class_end_notification_scheduler
 
@@ -72,7 +72,7 @@ def MakeClient() -> MyClient:
         
     @client.tree.command(name="done", description="未完了の課題を完了にする")
     async def done_command(interaction: discord.Interaction):
-        tasks = DB_Check_All()
+        tasks = DB_Check_Pending()
         if not tasks:
             await interaction.response.send_message("課題はありません。", ephemeral=True)
             return
