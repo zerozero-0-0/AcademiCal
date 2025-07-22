@@ -1,5 +1,7 @@
+from email.policy import default
 import re
 from datetime import datetime, timedelta
+from typing import Optional
 
 import discord
 
@@ -19,28 +21,40 @@ class Add(discord.ui.Modal):
         label="課題名を入力",
         style=discord.TextStyle.short,
         placeholder="課題名",  # 将来的に[授業名][第n回レポート]にする
+        default="",
+        max_length=30,
         required=True,
     )
 
     task_description = discord.ui.TextInput(
         label="課題の説明を入力してください",
-        style=discord.TextStyle.long,
+        style=discord.TextStyle.short,
+        max_length=100,
         required=False,
     )
 
     task_due_date = discord.ui.TextInput(
-        label="締切日を入力", style=discord.TextStyle.short, default=time, required=True
+        label="締切日を入力", 
+        style=discord.TextStyle.short, 
+        default=time, 
+        required=True
     )
 
-    def __init__(self, subject_name: str = None) -> None:
+    def __init__(self, subject_name: Optional[str] = None) -> None:
         super().__init__(
             title=f"AcademiCal Modal{f' - {subject_name}' if subject_name else ''}"
         )
         self.subject_name = subject_name
 
-        # subject_nameが指定されている場合、課題名のplaceholderを更新
         if subject_name:
-            self.task_title.placeholder = f"[{subject_name}] 課題名"
+            placeholder_txt = f"[{subject_name}]"
+            default_txt = f"{placeholder_txt}"
+        else :
+            placeholder_txt = "課題名"
+            default_txt = ""
+            
+        self.task_title.placeholder = placeholder_txt
+        self.task_title.default = default_txt
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
         if not re.match(r"^\d{1,2}/\d{1,2} \d{1,2}:\d{2}$", self.task_due_date.value):

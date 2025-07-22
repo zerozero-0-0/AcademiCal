@@ -8,6 +8,9 @@ from src.utils.getWeek import GetWeek
 from src.utils.read_json import read_json
 from src.utils.scheduler import get_subject_by_period
 
+
+CHANNEL_ID = os.getenv("CHANNEL_ID")
+
 class TaskAddView(discord.ui.View):
     """課題追加確認用のビュー"""
 
@@ -36,8 +39,8 @@ async def send_class_and_notification(client: discord.Client, task_title: str):
         client (discord.Client): Discordクライアント
         task_title (str): 課題のタイトル
     """
-    
-    channel_id = int(os.getenv("CHANNEL_ID"))
+    assert CHANNEL_ID is str
+    channel_id = int(CHANNEL_ID)
     channel = client.get_channel(channel_id)
     
     if not channel:
