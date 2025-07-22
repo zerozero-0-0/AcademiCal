@@ -16,4 +16,5 @@ error.log
 .ruff_cache
 .token
 credentials.json
+token.json
 calendar/*
