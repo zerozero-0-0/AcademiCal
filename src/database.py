@@ -1,10 +1,11 @@
 import sqlite3
+import os
 
-DB_name = 'assignments.db'
+DB_PATH = os.getenv('DATABASE_PATH', 'assignments.db')
 
 def DB_Connect():
     
-    conn = sqlite3.connect(DB_name, isolation_level=None)
+    conn = sqlite3.connect(DB_PATH, isolation_level=None)
     
     cursor = conn.cursor()
     
@@ -22,7 +23,7 @@ def DB_Connect():
     conn.close()
     
 def DB_Insert(title, description, due_data):
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_PATH)
     
     cur = conn.cursor()
     
@@ -33,7 +34,7 @@ def DB_Insert(title, description, due_data):
     conn.close()
 
 def DB_Update(id, title, description, due_date, status):
-    conn = sqlite3.connect(DB_name)    
+    conn = sqlite3.connect(DB_PATH)    
     cur = conn.cursor()
     
     cur.execute('UPDATE assignments SET title = ?, description = ?, due_date = ?, status = ? WHERE id = ?', (title, description, due_date, status, id))    
@@ -43,7 +44,7 @@ def DB_Update(id, title, description, due_date, status):
     conn.close()
     
 def DB_Delete(id):
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_PATH)
     
     cur = conn.cursor()
     
@@ -61,7 +62,7 @@ def DB_Done(id: str) -> None:
     Returns:
         None
     """
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_PATH)
     
     cur = conn.cursor()
     
@@ -73,7 +74,7 @@ def DB_Done(id: str) -> None:
     
 
 def DB_Check_All() -> list:
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_PATH)
     
     cur = conn.cursor()
     
@@ -92,7 +93,7 @@ def DB_Check_Pending() -> list:
     Returns:
         list: 未完了の課題のリスト
     """
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_PATH)
     
     cur = conn.cursor()
     
