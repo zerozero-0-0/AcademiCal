@@ -28,10 +28,7 @@ class DoneSelect(discord.ui.Select):
 
     async def callback(self, interaction: discord.Interaction):
         self.selected_ids = set(self.values)
-        await interaction.response.send_message(
-            f"選択中: {', '.join(self.values)}",
-            ephemeral=True
-        )
+        await interaction.response.defer()
 
 class DoneView(discord.ui.View):
     def __init__(self, tasks):
