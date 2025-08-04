@@ -5,7 +5,7 @@ from typing import Optional
 
 import discord
 
-from src.database import DB_Insert
+from src.database.operations import DB_Insert
 
 # 1. GUIを表示
 # 2. 入力を受け取る
@@ -34,10 +34,7 @@ class Add(discord.ui.Modal):
     )
 
     task_due_date = discord.ui.TextInput(
-        label="締切日を入力", 
-        style=discord.TextStyle.short, 
-        default=time, 
-        required=True
+        label="締切日を入力", style=discord.TextStyle.short, default=time, required=True
     )
 
     def __init__(self, subject_name: Optional[str] = None) -> None:
@@ -49,10 +46,10 @@ class Add(discord.ui.Modal):
         if subject_name:
             placeholder_txt = f"[{subject_name}]"
             default_txt = f"{placeholder_txt}"
-        else :
+        else:
             placeholder_txt = "課題名"
             default_txt = ""
-            
+
         self.task_title.placeholder = placeholder_txt
         self.task_title.default = default_txt
 

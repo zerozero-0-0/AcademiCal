@@ -1,5 +1,5 @@
 import re
-from src.utils.read_json import read_json
+from src.data.read_json import read_json
 from src.utils.scheduler import get_subject_by_period
 from datetime import datetime, timedelta
 import discord
