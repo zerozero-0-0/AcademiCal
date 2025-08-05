@@ -8,6 +8,7 @@ from src.bot.commands.add import Add
 from src.bot.commands.done import DoneView
 from src.bot.commands.list import create_task_list
 from src.database.operations import DB_Check_Pending
+from src.notifications.scheduler import start_class_end_notification_scheduler
 
 load_dotenv()
 

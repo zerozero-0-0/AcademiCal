@@ -14,10 +14,7 @@ def sendMessage(idx, next_notice_time) -> None:
         None
     """
     subject = get_subject_by_period(read_json("dataset/timetable.json"), "week", idx)
-    
-    if subject:
-        message = f"次の授業は {subject} です。時間: {next_notice_time}"
-       
+           
        
 current_time = datetime.now() + timedelta(days=7)
 

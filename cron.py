@@ -71,28 +71,3 @@ def start_health_check_cron_10min():
     cron_thread.start()
 
     return cron_thread
-
-
-# テスト実行用
-if __name__ == "__main__":
-    print("ヘルスチェッククロンジョブをテスト実行中...")
-
-    # 5分間隔のテスト（テスト用に短縮）
-    print("テストモード: 30秒間隔でヘルスチェックを実行します")
-
-    def test_cron():
-        while True:
-            health_check()
-            time.sleep(30)  # テスト用に30秒間隔
-
-    test_thread = threading.Thread(target=test_cron, daemon=True)
-    test_thread.start()
-
-    try:
-        print("クロンジョブが実行中です。Ctrl+Cで停止できます。")
-        print("本番環境では5分間隔で実行されます。")
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        print("\n停止シグナルを受信しました")
-        print("クロンジョブを停止しました")

@@ -2,7 +2,6 @@ from cron import start_health_check_cron
 from server import create_health_server
 from src.bot.client import MakeClient
 from src.database.connection import DB_Connect
-from src.data.date_utils import scheduler
 
 
 def main():
@@ -16,9 +15,6 @@ def main():
 
     client = MakeClient()
     client.run_bot()
-    s = scheduler()
-    print(s)
-
 
 if __name__ == "__main__":
     main()
