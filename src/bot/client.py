@@ -44,7 +44,7 @@ class MyClient(commands.Bot):
         else:
             print(f"チャンネルID {self.channel_id} が見つかりません。設定を確認してください。")
             
-        # asyncio.create_task(start_class_end_notification_scheduler(self))
+        asyncio.create_task(start_class_end_notification_scheduler(self))
         
     async def on_message(self, message: discord.Message) -> None:
         if message.author == self.user:
