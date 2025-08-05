@@ -1,6 +1,6 @@
 import re
 from src.data.read_json import read_json
-from src.utils.scheduler import get_subject_by_period
+from src.data.date_utils import get_subject_by_period
 from datetime import datetime, timedelta
 import discord
 
