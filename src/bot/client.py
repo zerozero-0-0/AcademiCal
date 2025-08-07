@@ -1,9 +1,7 @@
-from tracemalloc import start
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
-import asyncio
 
 from src.bot.commands.add import Add
 from src.bot.commands.done import DoneView
