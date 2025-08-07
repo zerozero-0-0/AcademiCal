@@ -1,3 +1,4 @@
+from tracemalloc import start
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -39,13 +40,17 @@ class MyClient(commands.Bot):
         print(f'{self.user} としてDiscordに接続しました!') 
         
         await self.tree.sync()
+        assert CHANNEL_ID is not None
         channel = self.get_channel(int(CHANNEL_ID))
         if channel:
             await channel.send("Botが起動しました!")
         else:
             print(f"チャンネルID {self.channel_id} が見つかりません。設定を確認してください。")
-            
-        asyncio.create_task(start_class_end_notification_scheduler(self))
+    
+        try:
+            await start_class_end_notification_scheduler(self)       
+        except Exception as e:
+            print(f"授業終了通知のスケジューラーの開始に失敗しました: {e}")     
         
     async def on_message(self, message: discord.Message) -> None:
         if message.author == self.user:
