@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from dotenv import load_dotenv
 import os
 
@@ -7,7 +7,7 @@ from src.bot.commands.add import Add
 from src.bot.commands.done import DoneView
 from src.bot.commands.list import create_task_list
 from src.database.operations import DB_Check_Pending
-from src.notifications.scheduler import start_class_end_notification_scheduler
+from src.notifications.scheduler import check_and_send_notification, start_class_end_notification_scheduler
 
 load_dotenv()
 
@@ -49,12 +49,20 @@ class MyClient(commands.Bot):
             await start_class_end_notification_scheduler(self)       
         except Exception as e:
             print(f"授業終了通知のスケジューラーの開始に失敗しました: {e}")     
+            
+        if not self.notification_loop.is_running():
+            self.notification_loop.start()
         
     async def on_message(self, message: discord.Message) -> None:
         if message.author == self.user:
             return
         
         print(f'{message.author} からメッセージを受信しました: {message.content}')
+        
+    @tasks.loop(seconds=60)
+    async def notification_loop(self):
+        """定期的に通知をチェックし、必要な場合は送信する"""
+        await check_and_send_notification(self, int(CHANNEL_ID))
         
     def run_bot(self) -> None:
         assert self.discord_token is not None
@@ -91,5 +99,6 @@ def MakeClient() -> MyClient:
             )
         view = DoneView(tasks)
         await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
+        
 
     return client
