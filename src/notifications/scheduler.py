@@ -7,6 +7,7 @@ from src.bot.commands.add import Add
 from src.data.date_utils import GetWeek
 from src.data.read_json import read_json
 from src.data.date_utils import get_subject_by_period
+from src.utils.sendMessage import Notification
 
 
 CHANNEL_ID = os.getenv("CHANNEL_ID")
@@ -79,7 +80,7 @@ async def check_and_send_notification(client: discord.Client, channel_id: int):
         print("タイムテーブルまたは期間データが読み込めませんでした。")
         return
 
-    for period_num in range(1, 6):
+    for period_num in range(1, 6): # 7 for test -> change to 6 in production
         period_str = str(period_num)
         end_time = period_data[period_str]["end_time"]
 

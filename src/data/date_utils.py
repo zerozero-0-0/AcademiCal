@@ -26,6 +26,10 @@ def GetWeek() -> str:
 
 
 def get_subject_by_period(timeTable, week, period_num):
+    if week not in timeTable: # exclude Saturday or Sunday
+        return None
+    
+    
     for period_data in timeTable[week]:
         if period_data["period"] == period_num:
             return period_data["subject_name"]

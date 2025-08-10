@@ -1,3 +1,4 @@
+import asyncio
 import discord
 from discord.ext import commands, tasks
 from dotenv import load_dotenv
@@ -45,10 +46,7 @@ class MyClient(commands.Bot):
         else:
             print(f"チャンネルID {self.channel_id} が見つかりません。設定を確認してください。")
     
-        try:
-            await start_class_end_notification_scheduler(self)       
-        except Exception as e:
-            print(f"授業終了通知のスケジューラーの開始に失敗しました: {e}")     
+        asyncio.create_task(start_class_end_notification_scheduler(self))     
             
         if not self.notification_loop.is_running():
             self.notification_loop.start()
