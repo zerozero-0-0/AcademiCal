@@ -1,16 +1,16 @@
 import asyncio
-from datetime import datetime
-import discord
 import os
+from datetime import datetime
+
+import discord
 
 from src.bot.commands.add import Add
-from src.data.date_utils import GetWeek
+from src.data.date_utils import GetWeek, get_subject_by_period
 from src.data.read_json import read_json
-from src.data.date_utils import get_subject_by_period
-from src.utils.sendMessage import Notification
 
-
-CHANNEL_ID = os.getenv("CHANNEL_ID")
+# 通知済みの授業を記録するセット（日付-時限で管理）
+notified_classes = set()
+last_cleared_date = None
 
 
 class TaskAddView(discord.ui.View):
@@ -45,12 +45,26 @@ async def send_class_and_notification(client: discord.Client, task_title: str):
         client (discord.Client): Discordクライアント
         task_title (str): 課題のタイトル
     """
-    assert CHANNEL_ID is str
-    channel_id = int(CHANNEL_ID)
+    channel_id_str = os.getenv("CHANNEL_ID")
+    if not channel_id_str:
+        print("CHANNEL_IDが設定されていません。")
+        return
+
+    try:
+        channel_id = int(channel_id_str)
+    except ValueError:
+        print(f"CHANNEL_IDが無効な値です: {channel_id_str}")
+        return
+
     channel = client.get_channel(channel_id)
 
     if not channel:
         print(f"チャンネルID {channel_id} が見つかりません。")
+        return
+
+    # チャンネルタイプのチェック
+    if not hasattr(channel, "send"):
+        print(f"チャンネル {channel_id} はメッセージ送信に対応していません。")
         return
 
     embed = discord.Embed(
@@ -65,13 +79,17 @@ async def send_class_and_notification(client: discord.Client, task_title: str):
 
     view = TaskAddView(task_title)
 
-    await channel.send(embed=embed, view=view)
+    try:
+        await channel.send(embed=embed, view=view)
+    except Exception as e:
+        print(f"メッセージ送信エラー: {e}")
 
 
 async def check_and_send_notification(client: discord.Client, channel_id: int):
     now = datetime.now()
     current_time = now.strftime("%H:%M")
     current_weekday = GetWeek()
+    today_str = now.strftime("%Y-%m-%d")
 
     timetable = read_json("dataset/timetable.json")
     period_data = read_json("dataset/period.json")
@@ -80,15 +98,30 @@ async def check_and_send_notification(client: discord.Client, channel_id: int):
         print("タイムテーブルまたは期間データが読み込めませんでした。")
         return
 
-    for period_num in range(1, 6): # 7 for test -> change to 6 in production
+    for period_num in range(1, 6):  # 1〜5限まで
         period_str = str(period_num)
-        end_time = period_data[period_str]["end_time"]
+        if period_str not in period_data:
+            continue
 
-        if current_time == end_time:
+        end_time = period_data[period_str]["end_time"]
+        notification_key = f"{today_str}_{period_str}"
+
+        # 現在時刻が終了時刻以降で、まだ通知していない場合
+        if current_time >= end_time and notification_key not in notified_classes:
             subject_name = get_subject_by_period(timetable, current_weekday, period_num)
 
             if subject_name and subject_name.strip() != "":
                 await send_class_and_notification(client, subject_name)
+                notified_classes.add(notification_key)
+
+    # 日付が変わったら通知履歴をクリア
+    global last_cleared_date
+    current_date = now.strftime("%Y-%m-%d")
+    if last_cleared_date is None:
+        last_cleared_date = current_date
+    elif last_cleared_date != current_date:
+        notified_classes.clear()
+        last_cleared_date = current_date
 
 
 async def start_class_end_notification_scheduler(client: discord.Client):
@@ -99,7 +132,15 @@ async def start_class_end_notification_scheduler(client: discord.Client):
     """
     print("授業終了通知スケジューラーを開始します...")
 
+    channel_id = os.getenv("CHANNEL_ID")
+    if not channel_id:
+        print("CHANNEL_IDが設定されていません")
+        return
+
     # 定期的に授業終了通知をチェック
     while True:
-        await check_and_send_notification(client, int(os.getenv("CHANNEL_ID")))
+        try:
+            await check_and_send_notification(client, int(channel_id))
+        except Exception as e:
+            print(f"通知チェック中にエラーが発生しました: {e}")
         await asyncio.sleep(60)  # 1分ごとにチェック
