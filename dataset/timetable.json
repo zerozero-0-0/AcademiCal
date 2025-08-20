@@ -10,7 +10,7 @@
         },
         {
             "period": 3,
-            "subject_name": "基本技術情報概論"
+            "subject_name": ""
         },
         {
             "period": 4,
@@ -24,15 +24,15 @@
     "Tuesday": [
         {
             "period": 1,
-            "subject_name": "英語"
+            "subject_name": ""
         },
         {
             "period": 2,
-            "subject_name": "数理論理学"
+            "subject_name": ""
         },
         {
             "period": 3,
-            "subject_name": "データ構造とアルゴリズム"
+            "subject_name": ""
         },
         {
             "period": 4,
@@ -40,13 +40,13 @@
         },
         {
             "period": 5,
-            "subject_name": "プログラミング演習Ⅱ"
+            "subject_name": ""
         }
     ],
     "Wednesday": [
         {
             "period": 1,
-            "subject_name": "生物学基礎"
+            "subject_name": ""
         },
         {
             "period": 2,
@@ -54,7 +54,7 @@
         },
         {
             "period": 3,
-            "subject_name": "基本情報技術概論"
+            "subject_name": ""
         },
         {
             "period": 4,
@@ -72,15 +72,15 @@
         },
         {
             "period": 2,
-            "subject_name": "信号とシステム"
+            "subject_name": ""
         },
         {
             "period": 3,
-            "subject_name": "化学基礎"
+            "subject_name": ""
         },
         {
             "period": 4,
-            "subject_name": "確率・統計基礎"
+            "subject_name": ""
         },
         {
             "period": 5,
@@ -90,7 +90,7 @@
     "Friday": [
         {
             "period": 1,
-            "subject_name": "イノベーションとマーケティング"
+            "subject_name": ""
         },
         {
             "period": 2,
