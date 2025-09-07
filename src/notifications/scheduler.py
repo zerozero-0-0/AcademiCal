@@ -1,5 +1,4 @@
 import asyncio
-import os
 from datetime import datetime
 
 import discord
@@ -7,6 +6,7 @@ import discord
 from src.bot.commands.add import Add
 from src.data.date_utils import GetWeek, get_subject_by_period
 from src.data.read_json import read_json
+from src.config.constants import CHANNEL_ID
 
 # 通知済みの授業を記録するセット（日付-時限で管理）
 notified_classes = set()
@@ -45,7 +45,7 @@ async def send_class_and_notification(client: discord.Client, task_title: str):
         client (discord.Client): Discordクライアント
         task_title (str): 課題のタイトル
     """
-    channel_id_str = os.getenv("CHANNEL_ID")
+    channel_id_str = CHANNEL_ID
     if not channel_id_str:
         print("CHANNEL_IDが設定されていません。")
         return
@@ -132,7 +132,7 @@ async def start_class_end_notification_scheduler(client: discord.Client):
     """
     print("授業終了通知スケジューラーを開始します...")
 
-    channel_id = os.getenv("CHANNEL_ID")
+    channel_id = CHANNEL_ID
     if not channel_id:
         print("CHANNEL_IDが設定されていません")
         return

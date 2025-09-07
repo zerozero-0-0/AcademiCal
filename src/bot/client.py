@@ -1,19 +1,14 @@
 import asyncio
 import discord
 from discord.ext import commands, tasks
-from dotenv import load_dotenv
-import os
 
 from src.bot.commands.add import Add
 from src.bot.commands.done import DoneView
 from src.bot.commands.list import create_task_list
 from src.database.operations import DB_Check_Pending
 from src.notifications.scheduler import check_and_send_notification, start_class_end_notification_scheduler
-
-load_dotenv()
-
-DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
-CHANNEL_ID = os.getenv("CHANNEL_ID")
+from src.notifications.daily_due_check import start_daily_due_prompt_scheduler
+from src.config.constants import DISCORD_TOKEN, CHANNEL_ID
 
 if not DISCORD_TOKEN and not CHANNEL_ID:
     raise ValueError("DISCORD_TOKEN または CHANNEL_ID が設定されていません")
@@ -46,7 +41,9 @@ class MyClient(commands.Bot):
         else:
             print(f"チャンネルID {self.channel_id} が見つかりません。設定を確認してください。")
     
-        asyncio.create_task(start_class_end_notification_scheduler(self))     
+        asyncio.create_task(start_class_end_notification_scheduler(self))
+        # 21:00に今日締切の課題完了確認を促すスケジューラー
+        asyncio.create_task(start_daily_due_prompt_scheduler(self))     
             
         if not self.notification_loop.is_running():
             self.notification_loop.start()
