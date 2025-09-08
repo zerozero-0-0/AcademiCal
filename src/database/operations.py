@@ -2,7 +2,7 @@ import sqlite3
 from src.database.DB_name import DB_name
 
 def DB_Insert(title, description, due_data):
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_name, timeout=10)
 
     cur = conn.cursor()
 
@@ -17,7 +17,7 @@ def DB_Insert(title, description, due_data):
 
 
 def DB_Update(id, title, description, due_date, status):
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_name, timeout=10)
     cur = conn.cursor()
 
     cur.execute(
@@ -31,7 +31,7 @@ def DB_Update(id, title, description, due_date, status):
 
 
 def DB_Delete(id):
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_name, timeout=10)
 
     cur = conn.cursor()
 
@@ -50,7 +50,7 @@ def DB_Done(id: str) -> None:
     Returns:
         None
     """
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_name, timeout=10)
 
     cur = conn.cursor()
 
@@ -62,7 +62,7 @@ def DB_Done(id: str) -> None:
 
 
 def DB_Check_All() -> list:
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_name, timeout=10)
 
     cur = conn.cursor()
 
@@ -82,7 +82,7 @@ def DB_Check_Pending() -> list:
     Returns:
         list: 未完了の課題のリスト
     """
-    conn = sqlite3.connect(DB_name)
+    conn = sqlite3.connect(DB_name, timeout=10)
 
     cur = conn.cursor()
 

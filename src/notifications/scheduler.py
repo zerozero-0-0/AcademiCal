@@ -1,12 +1,13 @@
 import asyncio
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import discord
 
 from src.bot.commands.add import Add
 from src.data.date_utils import GetWeek, get_subject_by_period
 from src.data.read_json import read_json
-from src.config.constants import CHANNEL_ID
+from src.config.constants import CHANNEL_ID, APP_TZ
 
 # 通知済みの授業を記録するセット（日付-時限で管理）
 notified_classes = set()
@@ -56,11 +57,15 @@ async def send_class_and_notification(client: discord.Client, task_title: str):
         print(f"CHANNEL_IDが無効な値です: {channel_id_str}")
         return
 
+    # まずキャッシュから取得し、失敗したらAPIで取得（キャッシュ未ヒット対策）
     channel = client.get_channel(channel_id)
-
-    if not channel:
-        print(f"チャンネルID {channel_id} が見つかりません。")
-        return
+    if channel is None:
+        try:
+            channel = await client.fetch_channel(channel_id)
+            print(f"fetch_channelでチャンネル取得成功: {channel_id}")
+        except Exception as e:
+            print(f"チャンネル取得に失敗しました（get_channel=None, fetch_channel失敗）: id={channel_id}, error={e}")
+            return
 
     # チャンネルタイプのチェック
     if not hasattr(channel, "send"):
@@ -71,7 +76,7 @@ async def send_class_and_notification(client: discord.Client, task_title: str):
         title="授業完了通知",
         description=f"**{task_title}** の授業が終了しました!",
         color=0x00FF00,
-        timestamp=datetime.now(),
+        timestamp=datetime.now(ZoneInfo(APP_TZ)),
     )
     embed.add_field(
         name="課題追加", value=f"{task_title} の課題を追加しますか？", inline=False
@@ -86,7 +91,7 @@ async def send_class_and_notification(client: discord.Client, task_title: str):
 
 
 async def check_and_send_notification(client: discord.Client, channel_id: int):
-    now = datetime.now()
+    now = datetime.now(ZoneInfo(APP_TZ))
     current_time = now.strftime("%H:%M")
     current_weekday = GetWeek()
     today_str = now.strftime("%Y-%m-%d")

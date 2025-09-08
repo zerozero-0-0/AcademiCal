@@ -7,7 +7,7 @@ from src.bot.commands.done import DoneView
 from src.bot.commands.list import create_task_list
 from src.database.operations import DB_Check_Pending
 from src.notifications.scheduler import check_and_send_notification, start_class_end_notification_scheduler
-from src.notifications.daily_due_check import start_daily_due_prompt_scheduler
+from src.notifications.daily_due_check import start_daily_due_prompt_scheduler, run_daily_due_prompt_now
 from src.config.constants import DISCORD_TOKEN, CHANNEL_ID
 
 if not DISCORD_TOKEN and not CHANNEL_ID:
@@ -36,10 +36,19 @@ class MyClient(commands.Bot):
         await self.tree.sync()
         assert CHANNEL_ID is not None
         channel = self.get_channel(int(CHANNEL_ID))
-        if channel:
-            await channel.send("Botが起動しました!")
+        if channel is None:
+            try:
+                channel = await self.fetch_channel(int(CHANNEL_ID))
+                print(f"on_ready: fetch_channelでチャンネル取得成功: {CHANNEL_ID}")
+            except Exception as e:
+                print(f"on_ready: チャンネル取得失敗（get_channel=None, fetch_channel失敗）: id={CHANNEL_ID}, error={e}")
+        if channel and hasattr(channel, "send"):
+            try:
+                await channel.send("Botが起動しました!")
+            except Exception as e:
+                print(f"on_ready: 起動メッセージ送信失敗: {e}")
         else:
-            print(f"チャンネルID {self.channel_id} が見つかりません。設定を確認してください。")
+            print(f"on_ready: チャンネル {self.channel_id} が見つからないか送信非対応です。設定を確認してください。")
     
         asyncio.create_task(start_class_end_notification_scheduler(self))
         # 21:00に今日締切の課題完了確認を促すスケジューラー
@@ -95,5 +104,14 @@ def MakeClient() -> MyClient:
         view = DoneView(tasks)
         await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
         
+    @client.tree.command(name="duecheck", description="今日が締切の課題の確認を即時送信する")
+    async def duecheck_command(interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=True)
+        try:
+            await run_daily_due_prompt_now(client)
+            await interaction.followup.send("確認メッセージを送信しました。", ephemeral=True)
+        except Exception as e:
+            await interaction.followup.send(f"送信に失敗しました: {e}", ephemeral=True)
+
 
     return client
